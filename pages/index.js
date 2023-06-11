@@ -6,8 +6,37 @@ import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 
 import NewsletterForm from '@/components/NewsletterForm'
+import { supabase } from './../lib/supabaseClient';
 
 const MAX_DISPLAY = 5
+
+/* SUpabase */
+function Page({ posts }) {
+    return (
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  export async function getServerSideProps() {
+    let { data } = await supabase.from('posts').select()
+
+  return {
+      props: {
+       posts: data
+      },
+    }
+  }
+
+  export default Page;
+
+/* end Supabase */
+
+
+/*
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
@@ -99,3 +128,5 @@ export default function Home({ posts }) {
     </>
   )
 }
+
+*/
